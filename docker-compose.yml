@@ -15,3 +15,12 @@ services:
     command: sh -c "python3 streaming.py"
     depends_on:
       - selenium
+
+  bot:
+    build:
+      context: .
+    volumes:
+      - ./app:/app
+    command: sh -c "python3 bot.py"
+    depends_on:
+      - selenium
