@@ -7,14 +7,11 @@ services:
     - 4444:4444
     restart: always
 
-
-
-
   app:
     build:
       context: .
     volumes:
     - ./app:/app
-    command: sh -c "python3 bot.py"
+    command: sh -c "python3 streaming.py"
     depends_on:
       - selenium
