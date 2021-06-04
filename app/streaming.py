@@ -49,7 +49,7 @@ def to_dic(ticks):
         close = data['ohlc']['close']
         change = data['change']
         ins_tok = data['instrument_token']
-        new_dict[ins_tok] = {'close': close, 'change': change, 'last_price': last_price}
+        new_dict[ins_tok] = {'instrument_token': ins_tok,'close': close, 'change': change, 'last_price': last_price}
     print(len(new_dict))
     return new_dict
 
