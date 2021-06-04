@@ -4,8 +4,8 @@ from kiteconnect import KiteTicker
 import pyrebase
 import json
 import datetime
-from app.bot import  api_token
-from app.token_store import token_key
+from firebasetoken import get_token
+from token_store import token_key
 #from .token_store import token_key
 # from .consumers import tokens
 
@@ -20,7 +20,7 @@ config = {
     "appId": "1:981866107803:web:568ffc6b464656a6f4c73e",
     "measurementId": "G-9BRWTZYS5C"
 }
-
+print(get_token())
 firebase = pyrebase.initialize_app(config)
 authe = firebase.auth()
 database = firebase.database()
@@ -28,7 +28,8 @@ database = firebase.database()
 logging.basicConfig(level=logging.DEBUG)
 # api_key = open('/home/akkey/Desktop/Django-projects/django-sockets/demo1/integers/api_key.txt', 'r').read()
 api_key = "0yvny102khsjlnpr"
-access_token = api_token()
+access_token = str(get_token())
+
 #"P0XqJpx45l6wZJNSx0lXrqEK1b61QXZl"
 # tokens = [5215745, 633601, 1195009, 779521, 758529, 1256193, 194561, 1837825, 952577, 1723649, 3930881, 4451329, 593665, 3431425, 2905857, 3771393, 3789569, 3463169, 381697, 54273, 415745, 2933761, 3580417, 49409, 3060993, 4464129, 3375873, 4574465, 636673, 3721473, 2796801]
 tokens = token_key
@@ -42,6 +43,7 @@ def myconverter(o):
              return o.__str__()
 
 def to_dic(ticks):
+
     
     for data in ticks:
         last_price = data['last_price']
@@ -58,6 +60,7 @@ data = []
 
 kws = KiteTicker(api_key, access_token)
 def on_ticks(ws, ticks):
+    print(access_token)
     print("Hiiemowe")
     data.clear()
     data.extend(ticks)

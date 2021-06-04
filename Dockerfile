@@ -8,6 +8,7 @@ RUN apt-get update && \
 
 
 ENV PYTHONBUFFERED 1
+ENV PYTHONPATH "${PYTHONPATH}:/app/"
 
 COPY ./requirements.txt /requirements.txt
 

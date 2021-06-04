@@ -8,10 +8,34 @@ from selenium.webdriver.chrome.options import Options
 from kiteconnect import KiteConnect
 from selenium.webdriver.common.desired_capabilities import DesiredCapabilities
 from selenium.webdriver.common.by import By
+import pyrebase
+import schedule
+
+
+def data_push(token):
+
+    config = {
+        "apiKey": "AIzaSyC--anxL74t3h78q7ZSVPMPipv2m244kBg",
+        "authDomain": "kitetoken-ca4cb.firebaseapp.com",
+        "databaseURL": "https://kitetoken-ca4cb-default-rtdb.firebaseio.com",
+        "projectId": "kitetoken-ca4cb",
+        "storageBucket": "kitetoken-ca4cb.appspot.com",
+        "messagingSenderId": "369939516780",
+        "appId": "1:369939516780:web:17b2f6a31a6a802a453749",
+        "measurementId": "G-DCVB5QCJ1Q"
+    }
+    firebase = pyrebase.initialize_app(config)
+
+    db = firebase.database()
+
+    data = {"token":token}
+
+    db.child("tokens").set(data)
+    return  print("Data added to real time database ")
+
+
 
 def api_token():
-
-
     api_key='0yvny102khsjlnpr'
     api_seceret='0zp3tp2bhxzamg8ph4q2s1ys7l5paunv'
     accountUserName = "ZB8746"
@@ -54,9 +78,28 @@ def api_token():
                 ## get the token url after success
     tokenurl = driver.current_url
     parsed = urlparse.urlparse(tokenurl)
-    driver.close()
+
     token=urlparse.parse_qs(parsed.query)['request_token'][0]
     print(token)
-    return token
+    kite = KiteConnect(api_key)
+    #kite.access_token()
+    data=kite.generate_session(token,api_seceret)
+    #data = kite.access_token(token, api_seceret)
+    # driver.close()
+    data['access_token']
+    kite.set_access_token(data['access_token'])
+    print("done")
+    data_push(data['access_token'])
+    print(data['access_token'])
+    driver.quit()
+    return data['access_token']
 
-print(api_token())
+# print(api_token())
+
+
+
+schedule.every(60).seconds.do(api_token)
+
+while True:
+    schedule.run_pending()
+    time.sleep(1)
