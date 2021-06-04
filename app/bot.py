@@ -41,9 +41,9 @@ def api_token():
     options = Options()
     options.add_argument('--no-sandbox')
     options.headless = True
-    # driver = webdriver.Remote('http://selenium:4444/wd/hub',desired_capabilities=DesiredCapabilities.CHROME,options=options)
-    path_to_chrome_driver = os.path.join(os.getcwd(), 'chromedriver')
-    driver  = webdriver.Chrome(ChromeDriverManager().install(), options=options)
+    driver = webdriver.Remote('http://selenium:4444/wd/hub',desired_capabilities=DesiredCapabilities.CHROME,options=options)
+    # path_to_chrome_driver = os.path.join(os.getcwd(), 'chromedriver')
+    # driver  = webdriver.Chrome(ChromeDriverManager().install(), options=options)
     sam=driver.get(url)
     wait = WebDriverWait(driver, 20)
 
