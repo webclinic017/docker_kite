@@ -1,3 +1,2 @@
-selenium
 kiteconnect
 pyrebase4

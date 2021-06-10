@@ -28,6 +28,7 @@ logging.basicConfig(level=logging.DEBUG)
 # api_key = open('/home/akkey/Desktop/Django-projects/django-sockets/demo1/integers/api_key.txt', 'r').read()
 api_key = "0yvny102khsjlnpr"
 access_token = str(database.child("access_token").get().val())
+# access_token = "8ifxAU8Ah8bxoNoMsWgiUbDU88OTJUY8"
 print("HIIIiiiiii")
 print(access_token)
 #"P0XqJpx45l6wZJNSx0lXrqEK1b61QXZl"
@@ -60,6 +61,8 @@ def on_ticks(ws, ticks):
     access_token = str(database.child("access_token").get().val())
     dic = to_dic(ticks)
     print(len(ticks))
+    val = int(database.child("int").get().val())
+    database.update({"int": val+1})
     database.update({"Stock": dic})
    
 
@@ -70,6 +73,7 @@ def on_connect(ws, response):
     ws.set_mode(ws.MODE_FULL, tokens)
 
 def on_close(ws, code, reason):
+    access_token = str(database.child("access_token").get().val())
     print("Stream stopped! Reconnecting")
 
 kws.on_ticks = on_ticks
