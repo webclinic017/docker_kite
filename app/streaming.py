@@ -39,6 +39,7 @@ new_dict = {}
 for t in tokens:
     new_dict[t] = {}
 # @sync_to_async
+closed = True
 def myconverter(o):
     if isinstance(o, datetime.datetime):
              return o.__str__()
@@ -58,7 +59,6 @@ def to_dic(ticks):
 kws = KiteTicker(api_key, access_token)
 def on_ticks(ws, ticks):
     print("Hiiemowe")
-    access_token = str(database.child("access_token").get().val())
     dic = to_dic(ticks)
     print(len(ticks))
     val = int(database.child("int").get().val())
@@ -73,13 +73,33 @@ def on_connect(ws, response):
     ws.set_mode(ws.MODE_FULL, tokens)
 
 def on_close(ws, code, reason):
-    access_token = str(database.child("access_token").get().val())
+    # access_token = str(database.child("access_token").get().val())
+    # kws = KiteTicker(api_key, access_token)
+    # kws.on_ticks = on_ticks
+    # kws.on_connect = on_connect
+    # kws.on_close = on_close
+    # kws.connect()
     print("Stream stopped! Reconnecting")
+    
 
 kws.on_ticks = on_ticks
 kws.on_connect = on_connect
-kws.on_close = on_close
+# kws.on_close = on_close
+# kws.on_reconnect = on_reconnect
 
 print ('Hiiiiiiiiiiiiiiiiii')
-kws.connect()
+kws.connect(threaded=True)
 print ('HIIIIIIIIIIIIII')
+
+while True:
+        print("Recheck")
+        new_access_token = str(database.child("access_token").get().val())
+        if access_token != new_access_token:
+            access_token = new_access_token
+            print("NEW")
+            kws = KiteTicker(api_key, access_token)
+            kws.on_ticks = on_ticks
+            kws.on_connect = on_connect
+            kws.on_close = on_close
+            kws.connect(threaded= True)
+        time.sleep(3)
